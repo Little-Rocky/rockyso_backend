@@ -4,6 +4,7 @@ import cn.hutool.http.HttpRequest;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import com.yupi.springbootinit.model.entity.Picture;
 import com.yupi.springbootinit.model.entity.Post;
 import com.yupi.springbootinit.service.PostService;
 import org.jsoup.Jsoup;
@@ -16,7 +17,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -33,6 +37,7 @@ public class CrawlerTest {
         Document doc = Jsoup.connect(url).get();
         // 直接获取到css元素下的内容
         Elements elements = doc.select(".iuscp.isv");
+        List<Picture> pictures = new ArrayList<>();
         for (Element element : elements) {
             // 获取图片地址（murl）
             String m = element.select(".iusc").get(0).attr("m");
@@ -42,6 +47,10 @@ public class CrawlerTest {
             System.out.println(murl);
             String title = element.select(".inflnk").get(0).attr("aria-label");
             System.out.println(title);
+            Picture picture = new Picture();
+            picture.setTitle(title);
+            picture.setUrl(url);
+            pictures.add(picture);
         }
     }
 
